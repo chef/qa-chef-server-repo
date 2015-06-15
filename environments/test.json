@@ -1,0 +1,18 @@
+{
+  "name": "test",
+  "description": "test qa-chef-server-cluster environment",
+  "json_class": "Chef::Environment",
+  "chef_type": "environment",
+  "default_attributes": {
+    "qa-chef-server-cluster": {
+      "aws": {
+        "machine_options": {
+          "ssh_username": "ubuntu",
+          "bootstrap_options": {
+            "image_id": "ami-3d50120d"
+          }
+        }
+      }
+    }
+  }
+}

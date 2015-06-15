@@ -254,9 +254,9 @@ attrs = {
     # 'auto-destroy' => cli.config[:disable_auto_destroy] ? false : true,
     # 'run-pedant' => cli.config[:skip_pedant] ? false : true,
 
-    'chef-server-core' => {},
-    'opscode-manage' => {},
-    'chef-ha' => {},
+    # 'chef-server-core' => {},
+    # 'opscode-manage' => {},
+    # 'chef-ha' => {},
 
     'aws' => {
       'machine_options' => {
@@ -270,31 +270,37 @@ attrs = {
 }
 
 if cli.config[:chef_server_core_install_version]
+  attrs['qa-chef-server-cluster']['chef-server-core'] = {}
   attrs['qa-chef-server-cluster']['chef-server-core']['install'] = version_for(cli.config[:chef_server_core_install_version], 
     cli.config[:chef_server_core_install_repo])
 end
 
 if cli.config[:chef_server_core_upgrade_version]
+  attrs['qa-chef-server-cluster']['chef-server-core'] = {}
   attrs['qa-chef-server-cluster']['chef-server-core']['upgrade'] = version_for(cli.config[:chef_server_core_upgrade_version], 
     cli.config[:chef_server_core_upgrade_repo])
 end
 
 if cli.config[:opscode_manage_install_version]
+  attrs['qa-chef-server-cluster']['opscode-manage'] = {}
   attrs['qa-chef-server-cluster']['opscode-manage']['install'] = version_for(cli.config[:opscode_manage_install_version], 
     cli.config[:opscode_manage_install_repo])
 end
 
 if cli.config[:opscode_manage_upgrade_version]
+  attrs['qa-chef-server-cluster']['opscode-manage'] = {}
   attrs['qa-chef-server-cluster']['opscode-manage']['upgrade'] = version_for(cli.config[:opscode_manage_upgrade_version],
     cli.config[:opscode_manage_upgrade_repo])
 end
 
 if cli.config[:chef_ha_install_version]
+  attrs['qa-chef-server-cluster']['chef-ha'] = {}
   attrs['qa-chef-server-cluster']['chef-ha']['install'] = version_for(cli.config[:chef_ha_install_version],
     cli.config[:chef_ha_install_repo])
 end
 
 if cli.config[:chef_ha_upgrade_version]
+  attrs['qa-chef-server-cluster']['chef-ha'] = {}
   attrs['qa-chef-server-cluster']['chef-ha']['upgrade'] = version_for(cli.config[:chef_ha_upgrade_version],
     repo_name(cli.config[:chef_ha_upgrade_repo]))
 end

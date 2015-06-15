@@ -27,7 +27,9 @@ class GenerateConfig
   include Mixlib::CLI
 
   banner """
-If you are having to edit the json attributes file then I'm doing it wrong.
+This utility will generate a Chef Environment file to configure the qa-chef-server-cluster cookbook.
+
+If you are having to edit the json file then I'm doing it wrong.
 Please submit an issue: https://github.com/opscode/qa-chef-server-cluster/issues
 
   ::Resolving artifacts from Artifactory::
@@ -115,16 +117,11 @@ Not setting these options will result in using the cookbook's defaults attribute
   #   :long => '--topology TOPOLOGY',
   #   :description => 'chef server topology'
 
-  option :attributes_file,
-    :short => '-j',
-    :long => '--json-attributes JSON ATTRIBUTES',
+  option :environment_name,
+    :short => '-n',
+    :long => '--environment-name ENVIRONMENT NAME',
     :description => 'output path for attributes file',
-    :default => 'attributes.json'
-
-  option :overwrite_attributes_file,
-    :short => '-f',
-    :description => 'overwrite existing attributes file',
-    :boolean => true
+    :required => true
 
   option :run_recipe,
     :short => '-r',
@@ -240,8 +237,17 @@ def is_url?(string)
   (string =~ /\A#{URI::regexp(['http', 'https'])}\z/) == 0
 end
 
+
+environment_template = {
+  name: "#{cli.config[:environment_name]}",
+  description: "#{cli.config[:environment_name]} qa-chef-server-cluster environment",
+  json_class: "Chef::Environment",
+  chef_type: "environment",
+  default_attributes: {
+  }
+}
+
 attrs = {
-  '_comment' => "If you are having to edit the json attributes file then I'm doing it wrong. Please submit an issue: https://github.com/opscode/qa-chef-server-cluster/issues",
   'qa-chef-server-cluster' => {
     # TODO what do I really want to do with these end-to-end settings?
     # 'enable-upgrade' => cli.config[:enable_upgrade] ? true : false
@@ -298,14 +304,14 @@ end
 #   attrs['qa-chef-server-cluster']['topology'] = cli.config[:topology]
 # end
 
-raise "#{cli.config[:attributes_file]} exists. Change file path or use -f option" if File.exist?(cli.config[:attributes_file]) and not cli.config[:overwrite_attributes_file]
+environment_template[:default_attributes].merge!(attrs)
 
-open(cli.config[:attributes_file], 'w') do |f|
-  f.puts JSON.pretty_generate(attrs)
+FileUtils.mkpath 'environments'
+
+open(File.join('environments', "#{cli.config[:environment_name]}.json"), 'w') do |f|
+  f.puts JSON.pretty_generate(environment_template)
 end
 
-puts "Attributes written to file #{cli.config[:attributes_file]}."
-
 if cli.config[:run_recipe]
-  system("bundle exec chef-client -z -j #{cli.config[:attributes_file]} -o qa-chef-server-cluster::#{cli.config[:run_recipe]}")
+  system("bundle exec chef-client -z -E #{cli.config[:environment_name]} -o qa-chef-server-cluster::#{cli.config[:run_recipe]}")
 end

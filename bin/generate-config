@@ -243,11 +243,10 @@ environment_template = {
   description: "#{cli.config[:environment_name]} qa-chef-server-cluster environment",
   json_class: "Chef::Environment",
   chef_type: "environment",
-  default_attributes: {
-  }
+  default_attributes: {}
 }
 
-attrs = {
+default_attributes = {
   'qa-chef-server-cluster' => {
     # TODO what do I really want to do with these end-to-end settings?
     # 'enable-upgrade' => cli.config[:enable_upgrade] ? true : false
@@ -270,41 +269,41 @@ attrs = {
 }
 
 if cli.config[:chef_server_core_install_version]
-  attrs['qa-chef-server-cluster']['chef-server-core']['install'] = version_for(cli.config[:chef_server_core_install_version], 
+  default_attributes['qa-chef-server-cluster']['chef-server-core']['install'] = version_for(cli.config[:chef_server_core_install_version], 
     cli.config[:chef_server_core_install_repo])
 end
 
 if cli.config[:chef_server_core_upgrade_version]
-  attrs['qa-chef-server-cluster']['chef-server-core']['upgrade'] = version_for(cli.config[:chef_server_core_upgrade_version], 
+  default_attributes['qa-chef-server-cluster']['chef-server-core']['upgrade'] = version_for(cli.config[:chef_server_core_upgrade_version], 
     cli.config[:chef_server_core_upgrade_repo])
 end
 
 if cli.config[:opscode_manage_install_version]
-  attrs['qa-chef-server-cluster']['opscode-manage']['install'] = version_for(cli.config[:opscode_manage_install_version], 
+  default_attributes['qa-chef-server-cluster']['opscode-manage']['install'] = version_for(cli.config[:opscode_manage_install_version], 
     cli.config[:opscode_manage_install_repo])
 end
 
 if cli.config[:opscode_manage_upgrade_version]
-  attrs['qa-chef-server-cluster']['opscode-manage']['upgrade'] = version_for(cli.config[:opscode_manage_upgrade_version],
+  default_attributes['qa-chef-server-cluster']['opscode-manage']['upgrade'] = version_for(cli.config[:opscode_manage_upgrade_version],
     cli.config[:opscode_manage_upgrade_repo])
 end
 
 if cli.config[:chef_ha_install_version]
-  attrs['qa-chef-server-cluster']['chef-ha']['install'] = version_for(cli.config[:chef_ha_install_version],
+  default_attributes['qa-chef-server-cluster']['chef-ha']['install'] = version_for(cli.config[:chef_ha_install_version],
     cli.config[:chef_ha_install_repo])
 end
 
 if cli.config[:chef_ha_upgrade_version]
-  attrs['qa-chef-server-cluster']['chef-ha']['upgrade'] = version_for(cli.config[:chef_ha_upgrade_version],
+  default_attributes['qa-chef-server-cluster']['chef-ha']['upgrade'] = version_for(cli.config[:chef_ha_upgrade_version],
     repo_name(cli.config[:chef_ha_upgrade_repo]))
 end
 
 # TODO what do I really want to do with these end-to-end settings?
 # if cli.config[:topology]
-#   attrs['qa-chef-server-cluster']['topology'] = cli.config[:topology]
+#   default_attributes['qa-chef-server-cluster']['topology'] = cli.config[:topology]
 # end
 
-environment_template[:default_attributes].merge!(attrs)
+environment_template[:default_attributes].merge!(default_attributes)
 
 FileUtils.mkpath 'environments'
 

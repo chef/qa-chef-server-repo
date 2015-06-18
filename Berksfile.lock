@@ -15,9 +15,7 @@ DEPENDENCIES
     branch: 0.3.0
   packagecloud
   qa-chef-server-cluster
-    git: git@github.com:chef/qa-chef-server-cluster.git
-    revision: 42219cc05997010930d2e07a7d5789c8f93571d7
-    branch: pw/cookbook_repo_split
+    path: ../qa-chef-server-cluster
 
 GRAPH
   apt (2.7.0)

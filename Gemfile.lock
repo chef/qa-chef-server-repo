@@ -24,7 +24,7 @@ GIT
 
 GIT
   remote: git@github.com:chef/qa-csc-config.git
-  revision: e1ce6a42662c1236106949b4ab3a6a57499678da
+  revision: bdbd3e79da09aeffe477734d14fe7267c93cd766
   specs:
     qa-csc-config (0.1.0)
       mixlib-cli (~> 1.5)
